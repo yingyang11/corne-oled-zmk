@@ -53,20 +53,26 @@
                 nav_layer {
                         display-name = "Nav";
 // ------------------------------------------------------------------------------------------
-// |CAPSW |^+TAB| ^RET| ^-R | ^-L | ^-Z |   | HOME| PGDN| PGUP| END | DEL |^BKSP |
+// |CAPSW |^+TAB| ^RET| ^-R | ^-L |DICT*|   | HOME| PGDN| PGUP| END | DEL |^BKSP |
 // |      | ^-A | ^-E | ^-W | ^-U | ^-K |   | LEFT| DOWN|  UP | RGHT| BACK| FWD  |
 // |      | ^-C | ^-D |SHOT4|SHOT5|CMDTB|   | W<- | LN<-| LN->| W-> | UNDO| REDO |
 //                    |     |     |SPOTL|   | ENT | SYS |*SHFT|
 // LEFT HAND = shell + Claude Code, every one a SINGLE press, no modifier held:
 //   ^-A start of line   ^-E end of line   ^-W delete word   ^-U delete line
 //   ^-K kill to end     ^-C interrupt     ^-D EOF           ^-L clear
-//   ^-R reverse search  ^-Z suspend
+//   ^-R reverse search
+//   DICT* = &kt F18, a LATCH for Wispr Flow dictation. Tap once and F18 is
+//   held down; tap again to release it. Push-to-talk semantics with nothing
+//   held by your fingers. Set Flow's push-to-talk shortcut to F18:
+//   Flow Hub > Settings > General > Shortcuts > Change.
+//   Flow's default fn hotkey CANNOT be used - ZMK cannot send Apple's fn.
+//   A momentary &kp F18 also sits on SYS if you want real hold-to-talk.
 //   ^+TAB = Shift-Tab, Claude Code mode cycle
 //   ^RET  = Option-Return, newline inside a prompt without submitting
 // RIGHT HAND = motion. W<- / W-> are Option-Arrow word jumps, LN<- / LN->
 // are Cmd-Arrow line jumps, BACK / FWD are Cmd-[ and Cmd-].
                         bindings = <
-   &caps_word &kp LS(TAB) &kp LA(RET) &kp LC(R)      &kp LC(L)      &kp LC(Z)     &kp HOME     &kp PG_DN    &kp PG_UP     &kp END       &kp DEL      &kp LA(BSPC)
+   &caps_word &kp LS(TAB) &kp LA(RET) &kp LC(R)      &kp LC(L)      &kt F18       &kp HOME     &kp PG_DN    &kp PG_UP     &kp END       &kp DEL      &kp LA(BSPC)
    &trans &kp LC(A)   &kp LC(E)   &kp LC(W)      &kp LC(U)      &kp LC(K)     &kp LEFT     &kp DOWN     &kp UP        &kp RIGHT     &kp LG(LBKT) &kp LG(RBKT)
    &trans &kp LC(C)   &kp LC(D)   &kp LG(LS(N4)) &kp LG(LS(N5)) &kp LG(TAB)   &kp LA(LEFT) &kp LG(LEFT) &kp LG(RIGHT) &kp LA(RIGHT) &kp LG(Z)    &kp LG(LS(Z))
                       &trans      &trans         &kp LG(SPACE)                &kp RET      &mo SYS      &sk LSHFT
@@ -115,7 +121,7 @@
                         display-name = "Sys";
 // ------------------------------------------------------------------------------------------
 // |STUDIO| BT0 | BT1 | BT2 | BT3 |BTCLR|   |  F1 |  F2 |  F3 |  F4 |  F5 |  F6  |
-// | BOOT | USB | BLE |GLOBE|     |     |   |  F7 |  F8 |  F9 | F10 | F11 | F12  |
+// | BOOT | USB | BLE |GLOBE| F18 |     |   |  F7 |  F8 |  F9 | F10 | F11 | F12  |
 // | RESET|     |     |     |     |     |   | MUTE| VOL-| VOL+| PREV| NEXT|RESET |
 //                    |     |     |     |   |     |     |     |
 // Reached with &mo SYS from NAV or SYM.
@@ -127,7 +133,7 @@
 // on NAV, F1-F12 on this layer.
                         bindings = <
    &studio_unlock &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_CLR   &kp F1     &kp F2       &kp F3       &kp F4     &kp F5     &kp F6
-   &bootloader    &out OUT_USB &out OUT_BLE &kp GLOBE    &none        &none        &kp F7     &kp F8       &kp F9       &kp F10    &kp F11    &kp F12
+   &bootloader    &out OUT_USB &out OUT_BLE &kp GLOBE    &kp F18      &none        &kp F7     &kp F8       &kp F9       &kp F10    &kp F11    &kp F12
    &sys_reset     &none        &none        &none        &none        &none        &kp C_MUTE &kp C_VOL_DN &kp C_VOL_UP &kp C_PREV &kp C_NEXT &sys_reset
                                             &trans       &trans       &trans                   &trans       &trans       &trans
                         >;

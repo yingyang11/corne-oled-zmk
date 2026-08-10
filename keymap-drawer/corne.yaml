@@ -13,11 +13,11 @@ layers:
   - O
   - P
   - BSPC
-  - {t: LCTRL, h: sticky}
-  - A
-  - S
-  - D
-  - F
+  - '&caps_word'
+  - {t: A, h: LSHFT}
+  - {t: S, h: LALT}
+  - {t: D, h: LCTRL}
+  - {t: F, h: LGUI}
   - G
   - H
   - J
@@ -25,7 +25,7 @@ layers:
   - L
   - ;
   - ''''
-  - {t: LALT, h: sticky}
+  - TAB
   - Z
   - X
   - C
@@ -36,7 +36,7 @@ layers:
   - ','
   - .
   - /
-  - TAB
+  - DEL
   - {t: LGUI, h: sticky}
   - {t: Nav, h: sticky}
   - SPACE
@@ -44,7 +44,7 @@ layers:
   - {t: Sym, h: sticky}
   - {t: LSHFT, h: sticky}
   Nav:
-  - '&caps_word'
+  - {t: ▽, type: trans}
   - Sft+TAB
   - Alt+RET
   - Ctl+R

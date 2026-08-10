@@ -4,9 +4,20 @@ This guide is for flashing the Ergomech Corne Keyboard. The Corne is 6×3+3 keys
 # ErgoMech Corne Wireless
 The Ergomech Corne Wireless uses a Nice!Nano microcontroller and runs the ZMK firmware. This guide will show you how to flash the ZMK firmware to the Nice!Nano microcontroller.
 
-## Default keymap
-The default keymap of this keyboard can be found here:
-![Default Keymap](./keymap-drawer/corne.svg)
+## Keymap
+This diagram is regenerated automatically by the `Draw ZMK keymaps` workflow on every
+push that touches `config/*.keymap`, so it always reflects the committed keymap.
+
+![Keymap](./keymap-drawer/corne.svg)
+
+## Prebuilt firmware
+You do not have to build anything. Every release has both halves attached as `left.uf2`
+and `right.uf2`, downloadable without a GitHub login:
+
+    curl -LO https://github.com/yingyang11/corne-oled-zmk/releases/latest/download/left.uf2
+    curl -LO https://github.com/yingyang11/corne-oled-zmk/releases/latest/download/right.uf2
+
+See [Releases](https://github.com/yingyang11/corne-oled-zmk/releases) for what changed in each.
 
 ## Flashing the Corne
 The ZMK cli tool would typically have you step through several questions to generate the necessary code to flash the firmware then upload it to a new repository on GitHub.
@@ -20,22 +31,26 @@ The workflow is triggered on push, pull_request, and manually via workflow_dispa
 ### Workflow Artifact
 Once the workflow has completed, you can download the artifact from the Actions tab. The artifact will be a .zip file that contains the firmware. Extract the .zip file in your
 local directory. The extracted files will include:
-- `corne_right-nice_nano_v2-zmk.uf2`
-- `corne_left-nice_nano_v2-zmk.uf2`
-- `settings_reset-nice_nano_v2-zmk.uf2`
+- `corne_right-nice_nano__zmk-zmk.uf2`
+- `corne_left-nice_nano__zmk-zmk.uf2`
+- `settings_reset-nice_nano__zmk-zmk.uf2`
+
+The `nice_nano__zmk` in those names comes from the board target `nice_nano//zmk`; ZMK
+renamed board targets when it moved to Zephyr 4.1, so older `nice_nano_v2` filenames
+no longer apply.
 
 ### Flashing the keymap and firmware
 #### Steps to ensure successful flashing
 - Keep in mind that the power switch on the wireless Ergomech Corne is only **one** of the ways that the keyboard can be powered. The other way is to plug in the USB-C cable.
 When flashing one side of the keyboard, the other side must be off. 
 - The keyboard must be in bootloader mode to flash the firmware. To enter the bootloader mode, press the "BOOT" button twice in quick succession. 
-- If you are having trouble flashing, you can always flash the `settings_reset-nice_nano_v2-zmk.uf2` file first. This is a good way to make sure 
+- If you are having trouble flashing, you can always flash the `settings_reset-nice_nano__zmk-zmk.uf2` file first. This is a good way to make sure 
 that the keyboard is in a known state before flashing the firmware. The `reset` flash can be visually confirmed by the screen on the Nice!Nano microcontroller 
 not displaying anything after the flash is complete.
 
 #### Flashing Order
 There is no required order to flash the firmware. You can flash the left or right side first. Assuming that you are attempting to flash the sides with the correct
-file (i.e. the right side with the `corne_right-nice_nano_v2-zmk.uf2` file), you may find it helpful to follow the following order:
+file (i.e. the right side with the `corne_right-nice_nano__zmk-zmk.uf2` file), you may find it helpful to follow the following order:
 1. Confirm both sides of the keyboard are off.
 2. Flash the right side of the keyboard, unplug the USB-C cable, and set it aside.
 3. Flash the left side of the keyboard, leaving it plugged in after.

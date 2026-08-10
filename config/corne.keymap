@@ -66,7 +66,7 @@
                         display-name = "Base";
 // ------------------------------------------------------------------------------------------
 // | ESC  |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U  |  I  |  O  |  P  | BKSP |
-// |CAPSW |  A  |  S  |  D  |  F  |  G  |   |  H  |  J  |  K  |  L  |  ;  |  '   |
+// |  `   |  A  |  S  |  D  |  F  |  G  |   |  H  |  J  |  K  |  L  |  ;  |  '   |
 // | TAB  |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M  |  ,  |  .  |  /  | DEL  |
 //                    |*CMD | NAV | SPC |   | ENT | SYM |*SHFT|
 // HOME-ROW MODIFIERS, so no modifier sits in the outer column any more:
@@ -79,7 +79,7 @@
 // Cmd-click and Shift-click.
                         bindings = <
    &kp ESC     &kp Q       &kp W      &kp E      &kp R       &kp T      &kp Y   &kp U   &kp I     &kp O   &kp P    &kp BSPC
-   &caps_word  &hm LSHFT A &hm LALT S &hm LCTRL D &hm LGUI F &kp G      &kp H   &kp J   &kp K     &kp L   &kp SEMI &kp SQT
+   &kp GRAVE   &hm LSHFT A &hm LALT S &hm LCTRL D &hm LGUI F &kp G      &kp H   &kp J   &kp K     &kp L   &kp SEMI &kp SQT
    &kp TAB     &kp Z       &kp X      &kp C      &kp V       &kp B      &kp N   &kp M   &kp COMMA &kp DOT &kp FSLH &kp DEL
                     &sk LGUI &sl NAV &kp SPACE   &kp RET &sl SYM &sk LSHFT
                         >;
@@ -115,7 +115,7 @@
 // RIGHT HAND = motion. W<- / W-> are Option-Arrow word jumps, LN<- / LN->
 // are Cmd-Arrow line jumps, BACK / FWD are Cmd-[ and Cmd-].
                         bindings = <
-   &trans     &kp LS(TAB) &kp LA(RET) &kp LC(R)      &kp LC(L)      &kp LA(F13)   &kp HOME     &kp PG_DN    &kp PG_UP     &kp END       &kp DEL      &kp LA(BSPC)
+   &caps_word &kp LS(TAB) &kp LA(RET) &kp LC(R)      &kp LC(L)      &kp LA(F13)   &kp HOME     &kp PG_DN    &kp PG_UP     &kp END       &kp DEL      &kp LA(BSPC)
    &trans &kp LC(A)   &kp LC(E)   &kp LC(W)      &kp LC(U)      &kp LC(K)     &kp LEFT     &kp DOWN     &kp UP        &kp RIGHT     &kp LG(LBKT) &kp LG(RBKT)
    &trans &kp LC(C)   &kp LC(D)   &kp LG(LS(N4)) &kp LA(F14)    &kp LG(TAB)   &kp LA(LEFT) &kp LG(LEFT) &kp LG(RIGHT) &kp LA(RIGHT) &kp LG(Z)    &kp LG(LS(Z))
                       &trans      &trans         &kp LG(SPACE)                &kp RET      &mo SYS      &sk LSHFT

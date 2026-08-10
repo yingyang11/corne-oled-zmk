@@ -115,13 +115,19 @@
                         display-name = "Sys";
 // ------------------------------------------------------------------------------------------
 // |STUDIO| BT0 | BT1 | BT2 | BT3 |BTCLR|   |  F1 |  F2 |  F3 |  F4 |  F5 |  F6  |
-// | BOOT | USB | BLE |     |     |     |   |  F7 |  F8 |  F9 | F10 | F11 | F12  |
+// | BOOT | USB | BLE |GLOBE|     |     |   |  F7 |  F8 |  F9 | F10 | F11 | F12  |
 // | RESET|     |     |     |     |     |   | MUTE| VOL-| VOL+| PREV| NEXT|RESET |
 //                    |     |     |     |   |     |     |     |
-// Reached by pressing both middle thumbs together.
+// Reached with &mo SYS from NAV or SYM.
+// GLOBE is ZMK's nearest equivalent to the Mac fn/Globe key. It sends HID
+// consumer usage 0x029D, which macOS accepts for input-source switching and
+// the emoji picker. It is NOT a true Apple fn: it is not treated as a
+// modifier, so Globe+arrow and fn+F-key chords do not work. Everything fn
+// is normally used for is already bound directly: DEL and HOME/END/PGUP/PGDN
+// on NAV, F1-F12 on this layer.
                         bindings = <
    &studio_unlock &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_CLR   &kp F1     &kp F2       &kp F3       &kp F4     &kp F5     &kp F6
-   &bootloader    &out OUT_USB &out OUT_BLE &none        &none        &none        &kp F7     &kp F8       &kp F9       &kp F10    &kp F11    &kp F12
+   &bootloader    &out OUT_USB &out OUT_BLE &kp GLOBE    &none        &none        &kp F7     &kp F8       &kp F9       &kp F10    &kp F11    &kp F12
    &sys_reset     &none        &none        &none        &none        &none        &kp C_MUTE &kp C_VOL_DN &kp C_VOL_UP &kp C_PREV &kp C_NEXT &sys_reset
                                             &trans       &trans       &trans                   &trans       &trans       &trans
                         >;

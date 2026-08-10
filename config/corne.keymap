@@ -1,56 +1,152 @@
 /*
- * Copyright (c) 2020 The ZMK Contributors
+ * Corne keymap: coding and Claude Code on macOS, built to minimise holding.
  *
- * SPDX-License-Identifier: MIT
+ * Design rules:
+ *   1. All four modifiers are STICKY (&sk) and all four are on the base layer
+ *      in prime positions. Tap and release, then press the next key.
+ *      Sticky keys still act as normal held modifiers if you DO hold them, so
+ *      Cmd-click, Opt-click and Shift-click all still work.
+ *   2. No hold-tap on letter keys and no home-row mods. Holding is what hurts.
+ *   3. ESC is top-left. ' keeps its normal home-row spot; TAB takes the
+ *      leftover right pinky bottom slot, since ESC already owns top-left.
+ *   4. Ctrl, Opt and Cmd all sit under the LEFT hand (pinky column + outer
+ *      thumb) so they chord with right-hand letters and with the mouse.
+ *   5. The shell and Claude Code chords you press constantly are bound as
+ *      SINGLE keys on NAV, so heavy Ctrl use does not mean heavy Ctrl holding.
+ *   6. Five layers, no combos. Combos on the thumbs all collided with real
+ *      bigrams (SPACE-RET, Cmd-Shift), so every layer is reached by a key.
  */
 
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/outputs.h>
+
+#define BASE 0
+#define NAV  1
+#define SYM  2
+#define NUM  3
+#define SYS  4
 
 / {
         keymap {
                 compatible = "zmk,keymap";
 
-                default_layer {
-// -----------------------------------------------------------------------------------------
-// |  TAB |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U   |  I  |  O  |  P  | BKSP |
-// | CTRL |  A  |  S  |  D  |  F  |  G  |   |  H  |  J   |  K  |  L  |  ;  |  '   |
-// | SHFT |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M   |  ,  |  .  |  /  | ESC  |
-//                    | GUI | LWR | SPC |   | ENT | RSE  | ALT |
+                base_layer {
+                        display-name = "Base";
+// ------------------------------------------------------------------------------------------
+// | ESC  |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U  |  I  |  O  |  P  | BKSP |
+// |*CTRL |  A  |  S  |  D  |  F  |  G  |   |  H  |  J  |  K  |  L  |  ;  |  '   |
+// | *OPT |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M  |  ,  |  .  |  /  | TAB  |
+//                    |*CMD | NAV | SPC |   | ENT | SYM |*SHFT|
+// All four *modifiers are sticky: tap then next key, or hold for click-chording.
+// Ctrl sits where a Mac's Caps Lock is, which is where most terminal users
+// already remap it. Opt is directly below. Cmd is the left outer thumb.
                         bindings = <
-   &kp TAB   &kp Q &kp W &kp E &kp R &kp T   &kp Y &kp U  &kp I     &kp O   &kp P    &kp BSPC
-   &kp LCTRL &kp A &kp S &kp D &kp F &kp G   &kp H &kp J  &kp K     &kp L   &kp SEMI &kp SQT
-   &kp LSHFT &kp Z &kp X &kp C &kp V &kp B   &kp N &kp M  &kp COMMA &kp DOT &kp FSLH &kp ESC
-                  &kp LGUI &mo 1 &kp SPACE   &kp RET &mo 2 &kp RALT
-                        >;
-                };
-                lower_layer {
-// -----------------------------------------------------------------------------------------
-// |  TAB |  1  |  2  |  3  |  4  |  5  |   |  6  |  7  |  8  |  9  |  0  | BKSP |
-// | BTCLR| BT1 | BT2 | BT3 | BT4 | BT5 |   | LFT | DWN |  UP | RGT |     |      |
-// | SHFT |     |     |     |     |     |   |     |     |     |     |     |      |
-//                    | GUI |     | SPC |   | ENT |     | ALT |
-                        bindings = <
-   &kp TAB    &kp N1       &kp N2       &kp N3       &kp N4       &kp N5         &kp N6   &kp N7   &kp N8 &kp N9    &kp N0 &kp BSPC
-   &bt BT_CLR &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4   &kp LEFT &kp DOWN &kp UP &kp RIGHT &trans &trans
-   &studio_unlock  &studio_unlock       &trans       &trans       &trans       &trans         &trans   &trans   &trans &trans    &trans &trans
-                                    &kp LGUI     &trans       &kp SPACE      &kp RET  &trans   &kp RALT
+   &kp ESC    &kp Q &kp W &kp E &kp R &kp T      &kp Y   &kp U   &kp I     &kp O   &kp P    &kp BSPC
+   &sk LCTRL  &kp A &kp S &kp D &kp F &kp G      &kp H   &kp J   &kp K     &kp L   &kp SEMI &kp SQT
+   &sk LALT   &kp Z &kp X &kp C &kp V &kp B      &kp N   &kp M   &kp COMMA &kp DOT &kp FSLH &kp TAB
+                    &sk LGUI &sl NAV &kp SPACE   &kp RET &sl SYM &sk LSHFT
                         >;
                 };
 
-                raise_layer {
-// -----------------------------------------------------------------------------------------
-// |  TAB |  !  |  @  |  #  |  $  |  %  |   |  ^  |  &  |  *  |  (  |  )  | BKSP |
-// | CTRL |     |     |     |     |     |   |  -  |  =  |  [  |  ]  |  \  |  `   |
-// | SHFT |     |     |     |     |     |   |  _  |  +  |  {  |  }  | "|" |  ~   |
-//                    | GUI |     | SPC |   | ENT |     | ALT |
+                nav_layer {
+                        display-name = "Nav";
+// ------------------------------------------------------------------------------------------
+// |CAPSW |^+TAB| ^RET| ^-R | ^-L | ^-Z |   | HOME| PGDN| PGUP| END | DEL |^BKSP |
+// |      | ^-A | ^-E | ^-W | ^-U | ^-K |   | LEFT| DOWN|  UP | RGHT| BACK| FWD  |
+// |      | ^-C | ^-D |SHOT4|SHOT5|CMDTB|   | W<- | LN<-| LN->| W-> | UNDO| REDO |
+//                    |     |     |SPOTL|   | ENT | SYS |*SHFT|
+// LEFT HAND = shell + Claude Code, every one a SINGLE press, no modifier held:
+//   ^-A start of line   ^-E end of line   ^-W delete word   ^-U delete line
+//   ^-K kill to end     ^-C interrupt     ^-D EOF           ^-L clear
+//   ^-R reverse search  ^-Z suspend
+//   ^+TAB = Shift-Tab, Claude Code mode cycle
+//   ^RET  = Option-Return, newline inside a prompt without submitting
+// RIGHT HAND = motion. W<- / W-> are Option-Arrow word jumps, LN<- / LN->
+// are Cmd-Arrow line jumps, BACK / FWD are Cmd-[ and Cmd-].
                         bindings = <
-   &kp  TAB  &kp EXCL &kp AT &kp HASH &kp DLLR &kp PRCNT   &kp CARET &kp AMPS  &kp ASTRK &kp LPAR &kp RPAR &kp BSPC
-   &kp LCTRL &trans   &trans &trans   &trans   &trans      &kp MINUS &kp EQUAL &kp LBKT  &kp RBKT &kp BSLH &kp GRAVE
-   &kp LSHFT &trans   &trans &trans   &trans   &trans      &kp UNDER &kp PLUS  &kp LBRC  &kp RBRC &kp PIPE &kp TILDE
-                             &kp LGUI &trans   &kp SPACE   &kp RET   &trans    &kp RALT
+   &caps_word &kp LS(TAB) &kp LA(RET) &kp LC(R)      &kp LC(L)      &kp LC(Z)     &kp HOME     &kp PG_DN    &kp PG_UP     &kp END       &kp DEL      &kp LA(BSPC)
+   &trans &kp LC(A)   &kp LC(E)   &kp LC(W)      &kp LC(U)      &kp LC(K)     &kp LEFT     &kp DOWN     &kp UP        &kp RIGHT     &kp LG(LBKT) &kp LG(RBKT)
+   &trans &kp LC(C)   &kp LC(D)   &kp LG(LS(N4)) &kp LG(LS(N5)) &kp LG(TAB)   &kp LA(LEFT) &kp LG(LEFT) &kp LG(RIGHT) &kp LA(RIGHT) &kp LG(Z)    &kp LG(LS(Z))
+                      &trans      &trans         &kp LG(SPACE)                &kp RET      &mo SYS      &sk LSHFT
+                        >;
+                };
+
+                sym_layer {
+                        display-name = "Sym";
+// ------------------------------------------------------------------------------------------
+// | NUM  |  1  |  2  |  3  |  4  |  5  |   |  6  |  7  |  8  |  9  |  0  | BKSP |
+// |      |  !  |  @  |  #  |  $  |  %  |   |  ^  |  &  |  *  |  (  |  )  |  _   |
+// |      |  `  |  ~  |  \  | "|" |  -  |   |  =  |  [  |  ]  |  {  |  }  |  :   |
+//                    |     | SYS | SPC |   |  .  |     |*SHFT|
+// Digits keep their normal left-to-right order, and the shifted symbol for each
+// digit sits directly below it, so there is nothing new to memorise.
+// Not on this layer, because they are one Shift away from a key you already have:
+//   "  = Shift '     +  = Shift =     ?  = Shift /     <  >  = Shift , .
+                        bindings = <
+   &tog NUM &kp N1    &kp N2    &kp N3    &kp N4    &kp N5       &kp N6    &kp N7   &kp N8    &kp N9   &kp N0   &kp BSPC
+   &trans &kp EXCL  &kp AT    &kp HASH  &kp DLLR  &kp PRCNT    &kp CARET &kp AMPS &kp ASTRK &kp LPAR &kp RPAR &kp UNDER
+   &trans &kp GRAVE &kp TILDE &kp BSLH  &kp PIPE  &kp MINUS    &kp EQUAL &kp LBKT &kp RBKT  &kp LBRC &kp RBRC &kp COLON
+                    &trans    &mo SYS   &kp SPACE               &kp DOT   &trans   &sk LSHFT
+                        >;
+                };
+
+                num_layer {
+                        display-name = "Num";
+// ------------------------------------------------------------------------------------------
+// | NUM  |     |     |     |     |     |   |  =  |  7  |  8  |  9  |  /  | BKSP |
+// |      |     |     |     |     |     |   |  -  |  4  |  5  |  6  |  *  | ENT  |
+// |      |     |     |     |     |     |   |  +  |  1  |  2  |  3  |  ,  |  .   |
+//                    |     |     |     |   |  0  |     |     |
+// Toggled from SYM's top-left key, and off again from the same physical key,
+// so it stays on while you key in a long number without holding anything.
+// The whole left half falls through to Base, so letters and all four sticky
+// modifiers still work while the numpad is active.
+                        bindings = <
+   &tog NUM &trans &trans &trans &trans &trans  &kp EQUAL &kp N7 &kp N8 &kp N9 &kp FSLH  &kp BSPC
+   &trans &trans &trans &trans &trans &trans    &kp MINUS &kp N4 &kp N5 &kp N6 &kp ASTRK &kp RET
+   &trans &trans &trans &trans &trans &trans    &kp PLUS  &kp N1 &kp N2 &kp N3 &kp COMMA &kp DOT
+                 &trans &trans &trans           &kp N0    &trans &trans
+                        >;
+                };
+
+                sys_layer {
+                        display-name = "Sys";
+// ------------------------------------------------------------------------------------------
+// |STUDIO| BT0 | BT1 | BT2 | BT3 |BTCLR|   |  F1 |  F2 |  F3 |  F4 |  F5 |  F6  |
+// | BOOT | USB | BLE |     |     |     |   |  F7 |  F8 |  F9 | F10 | F11 | F12  |
+// | RESET|     |     |     |     |     |   | MUTE| VOL-| VOL+| PREV| NEXT|RESET |
+//                    |     |     |     |   |     |     |     |
+// Reached by pressing both middle thumbs together.
+                        bindings = <
+   &studio_unlock &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_CLR   &kp F1     &kp F2       &kp F3       &kp F4     &kp F5     &kp F6
+   &bootloader    &out OUT_USB &out OUT_BLE &none        &none        &none        &kp F7     &kp F8       &kp F9       &kp F10    &kp F11    &kp F12
+   &sys_reset     &none        &none        &none        &none        &none        &kp C_MUTE &kp C_VOL_DN &kp C_VOL_UP &kp C_PREV &kp C_NEXT &sys_reset
+                                            &trans       &trans       &trans                   &trans       &trans       &trans
                         >;
                 };
         };
+};
+
+/* Sticky behaviour tuning.
+ * release-after-ms 2000: two seconds to press the next key instead of the
+ * default one second, so you are never rushing a chord.
+ * ignore-modifiers: lets you stack sticky mods, so Cmd then Shift then key
+ * works, and so Shift can be added on top of an active SYM layer.
+ */
+&sk {
+        release-after-ms = <2000>;
+        ignore-modifiers;
+};
+
+&sl {
+        release-after-ms = <2000>;
+};
+
+/* caps_word survives _ and - so SNAKE_CASE, CONSTANT_NAMES and SQL keywords
+ * all complete in one shot.
+ */
+&caps_word {
+        continue-list = <UNDERSCORE MINUS BACKSPACE DELETE>;
 };

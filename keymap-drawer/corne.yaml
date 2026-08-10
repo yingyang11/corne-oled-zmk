@@ -49,7 +49,7 @@ layers:
   - Alt+RET
   - Ctl+R
   - Ctl+L
-  - Ctl+Z
+  - {t: F18, h: toggle}
   - HOME
   - PG DN
   - PG UP
@@ -189,7 +189,7 @@ layers:
   - OUT USB
   - OUT BLE
   - GLOBE
-  - ''
+  - F18
   - ''
   - F7
   - F8

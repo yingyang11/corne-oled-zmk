@@ -55,30 +55,34 @@
 // ------------------------------------------------------------------------------------------
 // |CAPSW |^+TAB| ^RET| ^-R | ^-L | PTT |   | HOME| PGDN| PGUP| END | DEL |^BKSP |
 // |      | ^-A | ^-E | ^-W | ^-U | ^-K |   | LEFT| DOWN|  UP | RGHT| BACK| FWD  |
-// |      | ^-C | ^-D |SHOT4|LATCH|CMDTB|   | W<- | LN<-| LN->| W-> | UNDO| REDO |
+// |      | ^-C | ^-D |SHOT4|HFREE|CMDTB|   | W<- | LN<-| LN->| W-> | UNDO| REDO |
 //                    |     |     |SPOTL|   | ENT | SYS |*SHFT|
 // LEFT HAND = shell + Claude Code, every one a SINGLE press, no modifier held:
 //   ^-A start of line   ^-E end of line   ^-W delete word   ^-U delete line
 //   ^-K kill to end     ^-C interrupt     ^-D EOF           ^-L clear
 //   ^-R reverse search
-// Wispr Flow dictation. Flow's default fn and fn+space hotkeys CANNOT be used
-// at all: ZMK cannot send Apple's fn. Reassign both in
-// Flow Hub > Settings > General > Shortcuts > Change:
-//     push-to-talk -> F18        hands-free -> F19
-//   PTT   = &kp F18 on the T key. Hold to talk, release to stop and paste.
-//           Double-tap it to use Flow's own hands-free lock.
-//   LATCH = &kt F18 on the bottom-row index key. Tap once and F18 stays down,
-//           tap again to release. Same result as holding PTT, but your
-//           fingers hold nothing. This is the one to use by default.
-//   F19 (hands-free) is on SYS, since it is a set-and-forget toggle.
+// Wispr Flow dictation. Flow's default fn and fn+space CANNOT be used: ZMK
+// cannot send Apple's fn. Flow also REQUIRES at least one modifier in a
+// shortcut, so a bare F-key is rejected as an invalid key. Modifier+F13/F14
+// is the safest pairing available: F13-F19 have no default macOS binding at
+// all, and the added modifier satisfies Flow's validator.
+// Set in Flow Hub > Settings > General > Shortcuts > Change:
+//     push-to-talk -> Opt+F13    hands-free -> Opt+F14
+//   PTT   = &kp LA(F13) on the T key. Hold to talk, release to stop and paste.
+//           Use for short phrases.
+//   HFREE = &kp LA(F14) on the bottom-row index key. Tap to start dictating,
+//           tap again to stop. Nothing is held. Use this by default.
+// No &kt latch here: latching a modifier combo would leave Ctrl/Opt stuck
+// down and turn every later keystroke into a chord.
+// SYS also carries PASTE = Cmd+Ctrl+V, Flow's paste-last-transcript.
 //   ^+TAB = Shift-Tab, Claude Code mode cycle
 //   ^RET  = Option-Return, newline inside a prompt without submitting
 // RIGHT HAND = motion. W<- / W-> are Option-Arrow word jumps, LN<- / LN->
 // are Cmd-Arrow line jumps, BACK / FWD are Cmd-[ and Cmd-].
                         bindings = <
-   &caps_word &kp LS(TAB) &kp LA(RET) &kp LC(R)      &kp LC(L)      &kp F18       &kp HOME     &kp PG_DN    &kp PG_UP     &kp END       &kp DEL      &kp LA(BSPC)
+   &caps_word &kp LS(TAB) &kp LA(RET) &kp LC(R)      &kp LC(L)      &kp LA(F13)   &kp HOME     &kp PG_DN    &kp PG_UP     &kp END       &kp DEL      &kp LA(BSPC)
    &trans &kp LC(A)   &kp LC(E)   &kp LC(W)      &kp LC(U)      &kp LC(K)     &kp LEFT     &kp DOWN     &kp UP        &kp RIGHT     &kp LG(LBKT) &kp LG(RBKT)
-   &trans &kp LC(C)   &kp LC(D)   &kp LG(LS(N4)) &kt F18        &kp LG(TAB)   &kp LA(LEFT) &kp LG(LEFT) &kp LG(RIGHT) &kp LA(RIGHT) &kp LG(Z)    &kp LG(LS(Z))
+   &trans &kp LC(C)   &kp LC(D)   &kp LG(LS(N4)) &kp LA(F14)    &kp LG(TAB)   &kp LA(LEFT) &kp LG(LEFT) &kp LG(RIGHT) &kp LA(RIGHT) &kp LG(Z)    &kp LG(LS(Z))
                       &trans      &trans         &kp LG(SPACE)                &kp RET      &mo SYS      &sk LSHFT
                         >;
                 };
@@ -125,7 +129,7 @@
                         display-name = "Sys";
 // ------------------------------------------------------------------------------------------
 // |STUDIO| BT0 | BT1 | BT2 | BT3 |BTCLR|   |  F1 |  F2 |  F3 |  F4 |  F5 |  F6  |
-// | BOOT | USB | BLE |GLOBE| F19 |     |   |  F7 |  F8 |  F9 | F10 | F11 | F12  |
+// | BOOT | USB | BLE |GLOBE|PASTE|     |   |  F7 |  F8 |  F9 | F10 | F11 | F12  |
 // | RESET|     |     |     |     |     |   | MUTE| VOL-| VOL+| PREV| NEXT|RESET |
 //                    |     |     |     |   |     |     |     |
 // Reached with &mo SYS from NAV or SYM.
@@ -137,7 +141,7 @@
 // on NAV, F1-F12 on this layer.
                         bindings = <
    &studio_unlock &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_CLR   &kp F1     &kp F2       &kp F3       &kp F4     &kp F5     &kp F6
-   &bootloader    &out OUT_USB &out OUT_BLE &kp GLOBE    &kp F19      &none        &kp F7     &kp F8       &kp F9       &kp F10    &kp F11    &kp F12
+   &bootloader    &out OUT_USB &out OUT_BLE &kp GLOBE    &kp LC(LG(V)) &none        &kp F7     &kp F8       &kp F9       &kp F10    &kp F11    &kp F12
    &sys_reset     &none        &none        &none        &none        &none        &kp C_MUTE &kp C_VOL_DN &kp C_VOL_UP &kp C_PREV &kp C_NEXT &sys_reset
                                             &trans       &trans       &trans                   &trans       &trans       &trans
                         >;

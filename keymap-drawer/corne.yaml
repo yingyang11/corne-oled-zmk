@@ -188,7 +188,7 @@ layers:
   - '&bootloader'
   - OUT USB
   - OUT BLE
-  - ''
+  - GLOBE
   - ''
   - ''
   - F7

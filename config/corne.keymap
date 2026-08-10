@@ -6,11 +6,15 @@
  *      in prime positions. Tap and release, then press the next key.
  *      Sticky keys still act as normal held modifiers if you DO hold them, so
  *      Cmd-click, Opt-click and Shift-click all still work.
- *   2. No hold-tap on letter keys and no home-row mods. Holding is what hurts.
+ *   2. Home-row modifiers, but the hold LATCHES a sticky mod rather than
+ *      staying held through the chord, so a press is ~180ms rather than the
+ *      length of the shortcut. This replaces an earlier no-hold-tap rule:
+ *      reaching the outer column turned out to cost more than a 180ms hold.
  *   3. ESC is top-left. ' keeps its normal home-row spot; TAB takes the
  *      leftover right pinky bottom slot, since ESC already owns top-left.
- *   4. Ctrl, Opt and Cmd all sit under the LEFT hand (pinky column + outer
- *      thumb) so they chord with right-hand letters and with the mouse.
+ *   4. Every modifier is under the LEFT hand, on the home row or the thumb,
+ *      so they chord with right-hand letters and with the mouse without
+ *      the hand ever leaving home position.
  *   5. The shell and Claude Code chords you press constantly are bound as
  *      SINGLE keys on NAV, so heavy Ctrl use does not mean heavy Ctrl holding.
  *   6. Five layers, no combos. Combos on the thumbs all collided with real
@@ -28,6 +32,32 @@
 #define NUM  3
 #define SYS  4
 
+
+/ {
+        behaviors {
+                /* Home-row modifier. HOLD latches a sticky modifier, TAP types the
+                 * letter. Because the hold LATCHES, you release the home-row key
+                 * before pressing the next one, so nothing is held through the chord
+                 * and same-hand shortcuts like Cmd-C work normally. That is why no
+                 * hold-trigger-key-positions restriction is used here: it would break
+                 * Cmd-C, Cmd-V and Cmd-X, all of which are left-hand letters.
+                 *
+                 * require-prior-idle-ms is the setting that stops misfires while
+                 * typing fast: if you pressed another key within 150ms, this resolves
+                 * as a tap immediately and never as a modifier.
+                 */
+                hm: homerow_sticky_mod {
+                        compatible = "zmk,behavior-hold-tap";
+                        #binding-cells = <2>;
+                        flavor = "balanced";
+                        tapping-term-ms = <180>;
+                        quick-tap-ms = <175>;
+                        require-prior-idle-ms = <150>;
+                        bindings = <&sk>, <&kp>;
+                };
+        };
+};
+
 / {
         keymap {
                 compatible = "zmk,keymap";
@@ -36,16 +66,21 @@
                         display-name = "Base";
 // ------------------------------------------------------------------------------------------
 // | ESC  |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U  |  I  |  O  |  P  | BKSP |
-// |*CTRL |  A  |  S  |  D  |  F  |  G  |   |  H  |  J  |  K  |  L  |  ;  |  '   |
-// | *OPT |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M  |  ,  |  .  |  /  | TAB  |
+// |CAPSW |  A  |  S  |  D  |  F  |  G  |   |  H  |  J  |  K  |  L  |  ;  |  '   |
+// | TAB  |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M  |  ,  |  .  |  /  | DEL  |
 //                    |*CMD | NAV | SPC |   | ENT | SYM |*SHFT|
-// All four *modifiers are sticky: tap then next key, or hold for click-chording.
-// Ctrl sits where a Mac's Caps Lock is, which is where most terminal users
-// already remap it. Opt is directly below. Cmd is the left outer thumb.
+// HOME-ROW MODIFIERS, so no modifier sits in the outer column any more:
+//     hold A = Shift    hold S = Opt    hold D = Ctrl    hold F = Cmd
+//     tap   A = a       tap   S = s     etc.
+// The hold LATCHES a sticky modifier after ~180ms, so you release the home-row
+// key and then press the next one. Nothing is held through the chord itself.
+// *CMD on the left thumb and *SHFT on the right thumb remain as direct routes
+// for the two most-used modifiers, and both still hold normally for
+// Cmd-click and Shift-click.
                         bindings = <
-   &kp ESC    &kp Q &kp W &kp E &kp R &kp T      &kp Y   &kp U   &kp I     &kp O   &kp P    &kp BSPC
-   &sk LCTRL  &kp A &kp S &kp D &kp F &kp G      &kp H   &kp J   &kp K     &kp L   &kp SEMI &kp SQT
-   &sk LALT   &kp Z &kp X &kp C &kp V &kp B      &kp N   &kp M   &kp COMMA &kp DOT &kp FSLH &kp TAB
+   &kp ESC     &kp Q       &kp W      &kp E      &kp R       &kp T      &kp Y   &kp U   &kp I     &kp O   &kp P    &kp BSPC
+   &caps_word  &hm LSHFT A &hm LALT S &hm LCTRL D &hm LGUI F &kp G      &kp H   &kp J   &kp K     &kp L   &kp SEMI &kp SQT
+   &kp TAB     &kp Z       &kp X      &kp C      &kp V       &kp B      &kp N   &kp M   &kp COMMA &kp DOT &kp FSLH &kp DEL
                     &sk LGUI &sl NAV &kp SPACE   &kp RET &sl SYM &sk LSHFT
                         >;
                 };
@@ -80,7 +115,7 @@
 // RIGHT HAND = motion. W<- / W-> are Option-Arrow word jumps, LN<- / LN->
 // are Cmd-Arrow line jumps, BACK / FWD are Cmd-[ and Cmd-].
                         bindings = <
-   &caps_word &kp LS(TAB) &kp LA(RET) &kp LC(R)      &kp LC(L)      &kp LA(F13)   &kp HOME     &kp PG_DN    &kp PG_UP     &kp END       &kp DEL      &kp LA(BSPC)
+   &trans     &kp LS(TAB) &kp LA(RET) &kp LC(R)      &kp LC(L)      &kp LA(F13)   &kp HOME     &kp PG_DN    &kp PG_UP     &kp END       &kp DEL      &kp LA(BSPC)
    &trans &kp LC(A)   &kp LC(E)   &kp LC(W)      &kp LC(U)      &kp LC(K)     &kp LEFT     &kp DOWN     &kp UP        &kp RIGHT     &kp LG(LBKT) &kp LG(RBKT)
    &trans &kp LC(C)   &kp LC(D)   &kp LG(LS(N4)) &kp LA(F14)    &kp LG(TAB)   &kp LA(LEFT) &kp LG(LEFT) &kp LG(RIGHT) &kp LA(RIGHT) &kp LG(Z)    &kp LG(LS(Z))
                       &trans      &trans         &kp LG(SPACE)                &kp RET      &mo SYS      &sk LSHFT

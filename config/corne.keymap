@@ -50,7 +50,7 @@
                         compatible = "zmk,behavior-hold-tap";
                         #binding-cells = <2>;
                         flavor = "balanced";
-                        tapping-term-ms = <180>;
+                        tapping-term-ms = <220>;
                         quick-tap-ms = <175>;
                         require-prior-idle-ms = <150>;
                         bindings = <&sk>, <&kp>;
@@ -164,11 +164,15 @@
                 sys_layer {
                         display-name = "Sys";
 // ------------------------------------------------------------------------------------------
-// |STUDIO| BT0 | BT1 | BT2 | BT3 |BTCLR|   |  F1 |  F2 |  F3 |  F4 |  F5 |  F6  |
+// |STUDIO| BT1 | BT2 | BT3 | BT4 |BTCLR|   |  F1 |  F2 |  F3 |  F4 |  F5 |  F6  |
 // | BOOT | USB | BLE |GLOBE|PASTE|     |   |  F7 |  F8 |  F9 | F10 | F11 | F12  |
 // | RESET|     |     |     |     |     |   | MUTE| VOL-| VOL+| PREV| NEXT|RESET |
 //                    |     |     |     |   |     |     |     |
 // Reached with &mo SYS from NAV or SYM.
+// BT keys are labelled 1-4 to match the OLED. The bindings are BT_SEL 0-3
+// because ZMK's keycodes are 0-indexed, while output_status.c prints
+// profile_index + 1. So BT_SEL 2 shows as '3' on screen; the label here
+// follows the screen so the two agree.
 // GLOBE is ZMK's nearest equivalent to the Mac fn/Globe key. It sends HID
 // consumer usage 0x029D, which macOS accepts for input-source switching and
 // the emoji picker. It is NOT a true Apple fn: it is not treated as a

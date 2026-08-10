@@ -36,7 +36,7 @@ layers:
   - ','
   - .
   - /
-  - DEL
+  - Alt+F13
   - {t: LGUI, h: sticky}
   - {t: Nav, h: sticky}
   - SPACE
@@ -49,7 +49,7 @@ layers:
   - Alt+RET
   - Ctl+R
   - Ctl+L
-  - Alt+F13
+  - Alt+F14
   - HOME
   - PG DN
   - PG UP
@@ -72,7 +72,7 @@ layers:
   - Ctl+C
   - Ctl+D
   - Gui+Sft+4
-  - Alt+F14
+  - Gui+Sft+5
   - Gui+TAB
   - Alt+LEFT
   - Gui+LEFT

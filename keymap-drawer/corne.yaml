@@ -13,7 +13,7 @@ layers:
   - O
   - P
   - BSPC
-  - '&caps_word'
+  - '`'
   - {t: A, h: LSHFT}
   - {t: S, h: LALT}
   - {t: D, h: LCTRL}
@@ -44,7 +44,7 @@ layers:
   - {t: Sym, h: sticky}
   - {t: LSHFT, h: sticky}
   Nav:
-  - {t: ▽, type: trans}
+  - '&caps_word'
   - Sft+TAB
   - Alt+RET
   - Ctl+R

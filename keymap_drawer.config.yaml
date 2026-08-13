@@ -1,0 +1,17 @@
+# keymap-drawer configuration.
+#
+# The only override here is Bluetooth profile numbering. ZMK's BT_SEL keycodes
+# are 0-indexed, so &bt BT_SEL 2 renders as "BT 2" by default, while everything
+# human-facing calls that same profile 3: ZMK's own display widget prints
+# profile_index + 1 (see output_status.c), and the keymap comments label the
+# keys 1-4 to match. Rendering the raw index made the diagram the only place
+# using a different numbering, which is exactly how you mis-select a profile.
+#
+# raw_binding_map short-circuits parsing for an exact binding string, so this
+# relabels without touching the keymap or the bindings themselves.
+parse_config:
+  raw_binding_map:
+    "&bt BT_SEL 0": {t: BT, h: "1"}
+    "&bt BT_SEL 1": {t: BT, h: "2"}
+    "&bt BT_SEL 2": {t: BT, h: "3"}
+    "&bt BT_SEL 3": {t: BT, h: "4"}

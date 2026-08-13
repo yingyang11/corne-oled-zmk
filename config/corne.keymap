@@ -6,15 +6,14 @@
  *      in prime positions. Tap and release, then press the next key.
  *      Sticky keys still act as normal held modifiers if you DO hold them, so
  *      Cmd-click, Opt-click and Shift-click all still work.
- *   2. Home-row modifiers, but the hold LATCHES a sticky mod rather than
- *      staying held through the chord, so a press is ~180ms rather than the
- *      length of the shortcut. This replaces an earlier no-hold-tap rule:
- *      reaching the outer column turned out to cost more than a 180ms hold.
+ *   2. No hold-tap on letter keys and no home-row mods. Every base-layer key
+ *      does exactly one thing, so there is no hold timing to learn and no
+ *      misfire to diagnose. Holding is also the thing that hurts.
  *   3. ESC is top-left. ' keeps its normal home-row spot; TAB takes the
- *      leftover right pinky bottom slot, since ESC already owns top-left.
- *   4. Every modifier is under the LEFT hand, on the home row or the thumb,
- *      so they chord with right-hand letters and with the mouse without
- *      the hand ever leaving home position.
+ *      right pinky bottom slot, since ESC already owns top-left.
+ *   4. Ctrl and Opt own the left outer column, Cmd and Shift the thumbs, so
+ *      every modifier is under the LEFT hand and chords with right-hand
+ *      letters and with the mouse.
  *   5. The shell and Claude Code chords you press constantly are bound as
  *      SINGLE keys on NAV, so heavy Ctrl use does not mean heavy Ctrl holding.
  *   6. Five layers, no combos. Combos on the thumbs all collided with real
@@ -34,31 +33,6 @@
 
 
 / {
-        behaviors {
-                /* Home-row modifier. HOLD latches a sticky modifier, TAP types the
-                 * letter. Because the hold LATCHES, you release the home-row key
-                 * before pressing the next one, so nothing is held through the chord
-                 * and same-hand shortcuts like Cmd-C work normally. That is why no
-                 * hold-trigger-key-positions restriction is used here: it would break
-                 * Cmd-C, Cmd-V and Cmd-X, all of which are left-hand letters.
-                 *
-                 * require-prior-idle-ms is the setting that stops misfires while
-                 * typing fast: if you pressed another key within 150ms, this resolves
-                 * as a tap immediately and never as a modifier.
-                 */
-                hm: homerow_sticky_mod {
-                        compatible = "zmk,behavior-hold-tap";
-                        #binding-cells = <2>;
-                        flavor = "balanced";
-                        tapping-term-ms = <220>;
-                        quick-tap-ms = <175>;
-                        require-prior-idle-ms = <150>;
-                        bindings = <&sk>, <&kp>;
-                };
-        };
-};
-
-/ {
         keymap {
                 compatible = "zmk,keymap";
 
@@ -66,21 +40,25 @@
                         display-name = "Base";
 // ------------------------------------------------------------------------------------------
 // | ESC  |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U  |  I  |  O  |  P  | BKSP |
-// |  `   |  A  |  S  |  D  |  F  |  G  |   |  H  |  J  |  K  |  L  |  ;  |  '   |
-// | TAB  |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M  |  ,  |  .  |  /  | DEL  |
+// |*CTRL |  A  |  S  |  D  |  F  |  G  |   |  H  |  J  |  K  |  L  |  ;  |  '   |
+// | *OPT |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M  |  ,  |  .  |  /  | TAB  |
 //                    |*CMD | NAV | SPC |   | ENT | SYM |*SHFT|
-// HOME-ROW MODIFIERS, so no modifier sits in the outer column any more:
-//     hold A = Shift    hold S = Opt    hold D = Ctrl    hold F = Cmd
-//     tap   A = a       tap   S = s     etc.
-// The hold LATCHES a sticky modifier after ~180ms, so you release the home-row
-// key and then press the next one. Nothing is held through the chord itself.
-// *CMD on the left thumb and *SHFT on the right thumb remain as direct routes
-// for the two most-used modifiers, and both still hold normally for
-// Cmd-click and Shift-click.
+// Every letter key is a plain keypress. Nothing on this layer is a hold-tap,
+// so there is no tapping term to fight and no way to misfire a modifier.
+// All four *modifiers are sticky: tap one, then press the next key. They also
+// still work as ordinary held modifiers, so Cmd-click, Opt-click and
+// Shift-click are unchanged.
+//     Ctrl sits where a Mac's Caps Lock is, which is where most terminal
+//     users remap it already. Opt is directly below it. Cmd is the left outer
+//     thumb, Shift the right outer thumb.
+// Because the modifiers are separate keys rather than layered onto letters,
+// same-key shortcuts are just two taps: Opt+S is tap OPT, tap S.
+// Push-to-talk moved to NAV's outer thumb so TAB could keep a plain base key,
+// and backtick lives on SYM (SYM then Z) rather than taking a modifier's slot.
                         bindings = <
-   &kp ESC     &kp Q       &kp W      &kp E      &kp R       &kp T      &kp Y   &kp U   &kp I     &kp O   &kp P    &kp BSPC
-   &kp GRAVE   &hm LSHFT A &hm LALT S &hm LCTRL D &hm LGUI F &kp G      &kp H   &kp J   &kp K     &kp L   &kp SEMI &kp SQT
-   &kp TAB     &kp Z       &kp X      &kp C      &kp V       &kp B      &kp N   &kp M   &kp COMMA &kp DOT &kp FSLH &kp LA(F13)
+   &kp ESC    &kp Q &kp W &kp E &kp R &kp T      &kp Y   &kp U   &kp I     &kp O   &kp P    &kp BSPC
+   &sk LCTRL  &kp A &kp S &kp D &kp F &kp G      &kp H   &kp J   &kp K     &kp L   &kp SEMI &kp SQT
+   &sk LALT   &kp Z &kp X &kp C &kp V &kp B      &kp N   &kp M   &kp COMMA &kp DOT &kp FSLH &kp TAB
                     &sk LGUI &sl NAV &kp SPACE   &kp RET &sl SYM &sk LSHFT
                         >;
                 };
@@ -91,7 +69,14 @@
 // |CAPSW |^+TAB| ^RET| ^-R | ^-L |HFREE|   | HOME| PGDN| PGUP| END | DEL |^BKSP |
 // |      | ^-A | ^-E | ^-W | ^-U | ^-K |   | LEFT| DOWN|  UP | RGHT| BACK| FWD  |
 // |      | ^-C | ^-D |SHOT4|SHOT5|CMDTB|   | W<- | LN<-| LN->| W-> | UNDO| REDO |
-//                    |     |     |SPOTL|   | ENT | SYS |*SHFT|
+//                    | PTT |     |SPOTL|   | ENT | SYS |*SHFT|
+// PTT sits on the left OUTER THUMB. Tap the middle thumb for NAV, then slide
+// the same thumb out one key and hold. The thumb is the strongest digit on the
+// board, which matters here because this is the longest hold in the keymap: it
+// lasts as long as the sentence being dictated. Any finger position would be
+// worse, and the two keys are adjacent so it is one motion.
+// The outer column stays &trans on both lower rows, so it falls through to
+// Ctrl and Opt and keeps both reachable without leaving this layer.
 // LEFT HAND = shell + Claude Code, every one a SINGLE press, no modifier held:
 //   ^-A start of line   ^-E end of line   ^-W delete word   ^-U delete line
 //   ^-K kill to end     ^-C interrupt     ^-D EOF           ^-L clear
@@ -103,9 +88,9 @@
 // all, and the added modifier satisfies Flow's validator.
 // Set in Flow Hub > Settings > General > Shortcuts > Change:
 //     push-to-talk -> Opt+F13    hands-free -> Opt+F14
-//   PTT   = &kp LA(F13) on BASE, right pinky bottom. Hold to talk, release to
+//   PTT   = &kp LA(F13) on NAV's left outer thumb. Hold to talk, release to
 //           stop and paste. Double-tap it for Flow's own hands-free lock, so
-//           this one key covers both modes without a layer hop.
+//           this one key covers both modes.
 //   HFREE = &kp LA(F14) on NAV, the T position. Tap to start dictating, tap
 //           again to stop. Nothing held; use when PTT's hold is unwelcome.
 // No &kt latch here: latching a modifier combo would leave Ctrl/Opt stuck
@@ -119,7 +104,7 @@
    &caps_word &kp LS(TAB) &kp LA(RET) &kp LC(R)      &kp LC(L)      &kp LA(F14)   &kp HOME     &kp PG_DN    &kp PG_UP     &kp END       &kp DEL      &kp LA(BSPC)
    &trans &kp LC(A)   &kp LC(E)   &kp LC(W)      &kp LC(U)      &kp LC(K)     &kp LEFT     &kp DOWN     &kp UP        &kp RIGHT     &kp LG(LBKT) &kp LG(RBKT)
    &trans &kp LC(C)   &kp LC(D)   &kp LG(LS(N4)) &kp LG(LS(N5)) &kp LG(TAB)   &kp LA(LEFT) &kp LG(LEFT) &kp LG(RIGHT) &kp LA(RIGHT) &kp LG(Z)    &kp LG(LS(Z))
-                      &trans      &trans         &kp LG(SPACE)                &kp RET      &mo SYS      &sk LSHFT
+                      &kp LA(F13) &trans         &kp LG(SPACE)                &kp RET      &mo SYS      &sk LSHFT
                         >;
                 };
 

@@ -13,11 +13,11 @@ layers:
   - O
   - P
   - BSPC
-  - '`'
-  - {t: A, h: LSHFT}
-  - {t: S, h: LALT}
-  - {t: D, h: LCTRL}
-  - {t: F, h: LGUI}
+  - {t: LCTRL, h: sticky}
+  - A
+  - S
+  - D
+  - F
   - G
   - H
   - J
@@ -25,7 +25,7 @@ layers:
   - L
   - ;
   - ''''
-  - TAB
+  - {t: LALT, h: sticky}
   - Z
   - X
   - C
@@ -36,7 +36,7 @@ layers:
   - ','
   - .
   - /
-  - Alt+F13
+  - TAB
   - {t: LGUI, h: sticky}
   - {t: Nav, h: sticky}
   - SPACE
@@ -80,7 +80,7 @@ layers:
   - Alt+RIGHT
   - Gui+Z
   - Gui+Sft+Z
-  - {t: ▽, type: trans}
+  - Alt+F13
   - {type: held}
   - Gui+SPACE
   - RET

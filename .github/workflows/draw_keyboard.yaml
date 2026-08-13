@@ -3,6 +3,13 @@ name: Draw ZMK keymaps
 on:
   workflow_dispatch:  # can be triggered manually
   push:               # automatically run on changes to following paths
+    # Branches only. This job commits the rendered SVG back to the repo, which
+    # is impossible on a tag push: the checkout is a detached ref with no branch
+    # to push to, and git-auto-commit-action exits 128. Release tags were
+    # triggering it and failing whenever the tag pointed at a commit whose
+    # render was not yet committed.
+    branches:
+      - master
     paths:
       - "config/*.keymap"
       - "config/*.dtsi"

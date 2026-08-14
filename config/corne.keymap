@@ -9,8 +9,12 @@
  *   2. No hold-tap on letter keys and no home-row mods. Every base-layer key
  *      does exactly one thing, so there is no hold timing to learn and no
  *      misfire to diagnose. Holding is also the thing that hurts.
- *   3. ESC is top-left. ' keeps its normal home-row spot; TAB takes the
- *      right pinky bottom slot, since ESC already owns top-left.
+ *   3. ESC is top-left. ' keeps its normal home-row spot. Shift takes the
+ *      right pinky bottom slot, where every standard keyboard puts it, and
+ *      TAB goes to the right outer thumb: TAB is pressed more than Shift on
+ *      this keymap, because SYM binds the shifted symbols directly, so Shift
+ *      is only capitals and shortcuts. The more frequent key gets the
+ *      stronger digit, and the right pinky sheds load.
  *   4. Ctrl and Opt own the left outer column, Cmd and Shift the thumbs, so
  *      every modifier is under the LEFT hand and chords with right-hand
  *      letters and with the mouse.
@@ -41,8 +45,8 @@
 // ------------------------------------------------------------------------------------------
 // | ESC  |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U  |  I  |  O  |  P  | BKSP |
 // |*CTRL |  A  |  S  |  D  |  F  |  G  |   |  H  |  J  |  K  |  L  |  ;  |  '   |
-// | *OPT |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M  |  ,  |  .  |  /  | TAB  |
-//                    |*CMD | NAV | SPC |   | ENT | SYM |*SHFT|
+// | *OPT |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M  |  ,  |  .  |  /  |*SHFT |
+//                    |*CMD | NAV | SPC |   | ENT | SYM | TAB  |
 // Every letter key is a plain keypress. Nothing on this layer is a hold-tap,
 // so there is no tapping term to fight and no way to misfire a modifier.
 // All four *modifiers are sticky: tap one, then press the next key. They also
@@ -58,8 +62,8 @@
                         bindings = <
    &kp ESC    &kp Q &kp W &kp E &kp R &kp T      &kp Y   &kp U   &kp I     &kp O   &kp P    &kp BSPC
    &sk LCTRL  &kp A &kp S &kp D &kp F &kp G      &kp H   &kp J   &kp K     &kp L   &kp SEMI &kp SQT
-   &sk LALT   &kp Z &kp X &kp C &kp V &kp B      &kp N   &kp M   &kp COMMA &kp DOT &kp FSLH &kp TAB
-                    &sk LGUI &sl NAV &kp SPACE   &kp RET &sl SYM &sk LSHFT
+   &sk LALT   &kp Z &kp X &kp C &kp V &kp B      &kp N   &kp M   &kp COMMA &kp DOT &kp FSLH &sk LSHFT
+                    &sk LGUI &sl NAV &kp SPACE   &kp RET &sl SYM &kp TAB
                         >;
                 };
 
@@ -104,7 +108,7 @@
    &caps_word &kp LS(TAB) &kp LA(RET) &kp LC(R)      &kp LC(L)      &kp LA(F14)   &kp HOME     &kp PG_DN    &kp PG_UP     &kp END       &kp DEL      &kp LA(BSPC)
    &trans &kp LC(A)   &kp LC(E)   &kp LC(W)      &kp LC(U)      &kp LC(K)     &kp LEFT     &kp DOWN     &kp UP        &kp RIGHT     &kp LG(LBKT) &kp LG(RBKT)
    &trans &kp LC(C)   &kp LC(D)   &kp LG(LS(N4)) &kp LG(LS(N5)) &kp LG(TAB)   &kp LA(LEFT) &kp LG(LEFT) &kp LG(RIGHT) &kp LA(RIGHT) &kp LG(Z)    &kp LG(LS(Z))
-                      &kp LA(F13) &trans         &kp LG(SPACE)                &kp RET      &mo SYS      &sk LSHFT
+                      &kp LA(F13) &trans         &kp LG(SPACE)                &kp RET      &mo SYS      &trans
                         >;
                 };
 
@@ -123,7 +127,7 @@
    &tog NUM &kp N1    &kp N2    &kp N3    &kp N4    &kp N5       &kp N6    &kp N7   &kp N8    &kp N9   &kp N0   &kp BSPC
    &trans &kp EXCL  &kp AT    &kp HASH  &kp DLLR  &kp PRCNT    &kp CARET &kp AMPS &kp ASTRK &kp LPAR &kp RPAR &kp UNDER
    &trans &kp GRAVE &kp TILDE &kp BSLH  &kp PIPE  &kp MINUS    &kp EQUAL &kp LBKT &kp RBKT  &kp LBRC &kp RBRC &kp COLON
-                    &trans    &mo SYS   &kp SPACE               &kp DOT   &trans   &sk LSHFT
+                    &trans    &mo SYS   &kp SPACE               &kp DOT   &trans   &trans
                         >;
                 };
 

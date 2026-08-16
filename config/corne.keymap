@@ -155,9 +155,18 @@
 // ------------------------------------------------------------------------------------------
 // |STUDIO| BT1 | BT2 | BT3 | BT4 |BTCLR|   |  F1 |  F2 |  F3 |  F4 |  F5 |  F6  |
 // | BOOT | USB | BLE |GLOBE|PASTE|     |   |  F7 |  F8 |  F9 | F10 | F11 | F12  |
-// | RESET|     |     |     |     |     |   | MUTE| VOL-| VOL+| PREV| NEXT|RESET |
+// | RESET| W<- | W_v | W^  | W-> |     |   | MUTE| VOL-| VOL+| PREV| NEXT|RESET |
 //                    |     |     |     |   |     |     |     |
 // Reached with &mo SYS from NAV or SYM.
+// W<- W_v W^ W-> are Rectangle window snapping: Cmd+Opt+Ctrl plus an arrow.
+// Left to right they follow the same left/down/up/right order as the arrow
+// cluster on NAV, mirrored onto the left hand.
+// Done as single keys because the alternative is five taps: latching Cmd, then
+// Opt, then Ctrl, then NAV, then the arrow, with all five having to land inside
+// the 2000ms sticky window. Ctrl and Opt also share the left pinky column, so a
+// held three-modifier chord is not physically available on this layout.
+// &mo SYS is momentary, so hold it and tap several of these to arrange a few
+// windows in one go.
 // BT keys are labelled 1-4 to match the OLED. The bindings are BT_SEL 0-3
 // because ZMK's keycodes are 0-indexed, while output_status.c prints
 // profile_index + 1. So BT_SEL 2 shows as '3' on screen; the label here
@@ -171,7 +180,7 @@
                         bindings = <
    &studio_unlock &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_CLR   &kp F1     &kp F2       &kp F3       &kp F4     &kp F5     &kp F6
    &bootloader    &out OUT_USB &out OUT_BLE &kp GLOBE    &kp LC(LG(V)) &none        &kp F7     &kp F8       &kp F9       &kp F10    &kp F11    &kp F12
-   &sys_reset     &none        &none        &none        &none        &none        &kp C_MUTE &kp C_VOL_DN &kp C_VOL_UP &kp C_PREV &kp C_NEXT &sys_reset
+   &sys_reset     &kp LG(LA(LC(LEFT))) &kp LG(LA(LC(DOWN))) &kp LG(LA(LC(UP))) &kp LG(LA(LC(RIGHT))) &none   &kp C_MUTE &kp C_VOL_DN &kp C_VOL_UP &kp C_PREV &kp C_NEXT &sys_reset
                                             &trans       &trans       &trans                   &trans       &trans       &trans
                         >;
                 };

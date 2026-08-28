@@ -73,7 +73,7 @@
 // |CAPSW |^+TAB| ^RET| ^-R | ^-L |HFREE|   | HOME| PGDN| PGUP| END | DEL |^BKSP |
 // |      | ^-A | ^-E | ^-W | ^-U | ^-K |   | LEFT| DOWN|  UP | RGHT| BACK| FWD  |
 // |      | ^-C | ^-D |SHOT4|SHOT5|CMDTB|   | W<- | LN<-| LN->| W-> | UNDO| REDO |
-//                    | PTT |     |SPOTL|   | ENT | SYS |*SHFT|
+//                    | PTT |     |SPOTL|   | ENT | SYS | TAB  |
 // PTT sits on the left OUTER THUMB. Tap the middle thumb for NAV, then slide
 // the same thumb out one key and hold. The thumb is the strongest digit on the
 // board, which matters here because this is the longest hold in the keymap: it
@@ -118,16 +118,21 @@
 // | NUM  |  1  |  2  |  3  |  4  |  5  |   |  6  |  7  |  8  |  9  |  0  | BKSP |
 // |      |  !  |  @  |  #  |  $  |  %  |   |  ^  |  &  |  *  |  (  |  )  |  _   |
 // |      |  `  |  ~  |  \  | "|" |  -  |   |  =  |  [  |  ]  |  {  |  }  |  :   |
-//                    |     | SYS | SPC |   |  .  |     |*SHFT|
+//                    |     | SYS | SPC |   |  .  |     |  +   |
 // Digits keep their normal left-to-right order, and the shifted symbol for each
 // digit sits directly below it, so there is nothing new to memorise.
+// PLUS sits on the right OUTER THUMB. Tap SYM, then slide the same thumb out one
+// key: two taps instead of three, and the same motion as PTT on NAV. It takes
+// that slot from a &trans fall-through to TAB, which is a fair trade because +=
+// and string concatenation are constant in Python and SQL while TAB is still one
+// tap away on base.
 // Not on this layer, because they are one Shift away from a key you already have:
-//   "  = Shift '     +  = Shift =     ?  = Shift /     <  >  = Shift , .
+//   "  = Shift '     ?  = Shift /     <  >  = Shift , .
                         bindings = <
    &tog NUM &kp N1    &kp N2    &kp N3    &kp N4    &kp N5       &kp N6    &kp N7   &kp N8    &kp N9   &kp N0   &kp BSPC
    &trans &kp EXCL  &kp AT    &kp HASH  &kp DLLR  &kp PRCNT    &kp CARET &kp AMPS &kp ASTRK &kp LPAR &kp RPAR &kp UNDER
    &trans &kp GRAVE &kp TILDE &kp BSLH  &kp PIPE  &kp MINUS    &kp EQUAL &kp LBKT &kp RBKT  &kp LBRC &kp RBRC &kp COLON
-                    &trans    &mo SYS   &kp SPACE               &kp DOT   &trans   &trans
+                    &trans    &mo SYS   &kp SPACE               &kp DOT   &trans   &kp PLUS
                         >;
                 };
 

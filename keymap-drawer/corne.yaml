@@ -128,7 +128,7 @@ layers:
   - SPACE
   - .
   - {type: held}
-  - {t: ▽, type: trans}
+  - +
   Num:
   - {t: Num, h: toggle}
   - {t: ▽, type: trans}
